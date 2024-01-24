@@ -122,6 +122,16 @@ const DashHome = ({homechange, planchange, Transactions}) => {
                                         <img src={lineChart} alt="" />
                                     </div>
                                 </div>
+                                <div className="DashHomeMainContentAccSummaryRow2Box">
+                                    <div className="DashHomeMainContentAccSummaryRow2BoxL">
+                                        <h4>Total Profit </h4>
+                                        <h3>$ &nbsp;{userData?.totalProfit}.00</h3>
+                                        <span style={{fontWeight:"700"}}>{roundedNumber6}BTC</span>
+                                    </div>
+                                    <div className="DashHomeMainContentAccSummaryRow1BoxR">
+                                        <img src={lineChart} alt="" />
+                                    </div>
+                                </div>
                             {/* </div> */}
                             </div>
                         </div>
