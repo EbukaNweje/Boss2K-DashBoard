@@ -540,7 +540,7 @@ const Dashboard = () => {
                             ) : null}
                         </div>
                         <div className="DashboardMainFooter">
-                            <p>All Rights Reserved © Bitpaynexus 2024</p>
+                            <p>All Rights Reserved © Coinstarpro Bitminers 2024</p>
                         </div>
                     </div>
                 </div>
