@@ -2,16 +2,22 @@ import "./Transactions.css";
 import {FaDownload, FaArrowAltCircleUp} from "react-icons/fa";
 import {LuArrowRightFromLine} from "react-icons/lu";
 import {FaArrowUpLong, FaArrowDownLong} from "react-icons/fa6";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { useParams } from "react-router";
 
 const Transactions = () => {
+    const {id} = useParams()
     const userData = useSelector((state) => state.persisitedReducer.depositData)
     const userData2 = useSelector((state) => state.persisitedReducer.withdraw)
     console.log(userData2);
     const [transDeposit, setTransDeposit] = useState(true);
     const [transWithdrawal, setTransWithdrawal] = useState(false);
     const [transOthers, setTransOthers] = useState(false);
+    const [allDeposit, setAllDeposit] = useState();
+    const [allWithdrawal, setAllWithdrawal] = useState();
+    const [others, setOthers] = useState();
 
 
     const handleShowDeposit = () => {
@@ -19,6 +25,7 @@ const Transactions = () => {
         setTransWithdrawal(false);
         setTransOthers(false);
     };
+    
     const handleShowWithdrawal = () => {
         setTransDeposit(false);
         setTransWithdrawal(true);
@@ -29,6 +36,47 @@ const Transactions = () => {
         setTransWithdrawal(false);
         setTransOthers(true);
     };
+
+    const url = `https://tonexbackend.onrender.com/api/getalldeposit/${id}`
+    const url2 = `https://tonexbackend.onrender.com/api/getallwithdrawal/${id}`
+    const url3 = `https://tonexbackend.onrender.com/api/getalltransactions/${id}`
+
+    const getAllDeposit = ()=>{
+           axios.get(url)
+               .then(res=>{
+               console.log(res.data.data)
+               setAllDeposit(res.data.data)
+           })
+            .catch((err)=>{
+               console.log(err)
+           })
+}
+    const getAllWithdrawal = ()=>{
+           axios.get(url2)
+               .then(res=>{
+               console.log(res.data.data)
+               setAllWithdrawal(res.data.data)
+           })
+            .catch((err)=>{
+               console.log(err)
+           })
+}
+    const getAllOthers = ()=>{
+           axios.get(url3)
+               .then(res=>{
+               console.log(res.data)
+               setOthers(res.data)
+           })
+            .catch((err)=>{
+               console.log(err)
+           })
+}
+
+useEffect(()=>{
+    getAllDeposit()
+    getAllWithdrawal()
+    getAllOthers()
+},[])
 
     return (
         <>
@@ -117,19 +165,19 @@ const Transactions = () => {
                                 </div>
                                 <div className="TransactionContentResultC">
                                     {
-                                        userData.map((data, index)=>(
+                                        allDeposit?.map((data, index)=>(
                                         <div className="TransactionContentResultCItem" key={index+1}>
                                         <div className="TransactionContentResultC1">
                                             ${data.amount}
                                         </div>
                                         <div className="TransactionContentResultC2">
-                                            {data.paymentMode}
+                                            {data.coin}
                                         </div>
                                         <div className="TransactionContentResultC3">
                                             <span>{data.status}</span>
                                         </div>
                                         <div className="TransactionContentResultC4">
-                                        {data.dateCreated}
+                                        {data.depositDate}
                                         </div>
                                     </div>
                                         ))
@@ -213,22 +261,26 @@ const Transactions = () => {
                                 </div>
                                 <div className="TransactionContentResultC">
                                 {
-                                        userData2.map((props)=>( 
+                                        allWithdrawal.map((props)=>( 
                                     <div className="TransactionContentResultCItem">
                                         <div className="TransactionContentResultC1W">
                                             ${props.amount}
                                         </div>
                                         <div className="TransactionContentResultC2W">
-                                            {props.withdrawalWallet}
+                                            {props.walletAddress}
                                         </div>
                                         <div className="TransactionContentResultC2W">
-                                            Btc
+                                            {props.coin}
                                         </div>
                                         <div className="TransactionContentResultC3W">
-                                            <span>Pending</span>
+                                            <span 
+                                            style={{
+                                            background: props.status === "Approved"? "Green" : "red"
+                                        }}
+                                            > {props.status}</span>
                                         </div>
                                         <div className="TransactionContentResultC4W">
-                                            {props.dateCreated}
+                                            {props.withdrawDate}
                                         </div>
                                     </div>
                                     ))
@@ -288,7 +340,7 @@ const Transactions = () => {
                                         </span>
                                     </div>
                                     <div className="TransactionContentResultB3">
-                                        Plan/Narration
+                                        Status
                                         <span>
                                             <FaArrowUpLong />{" "}
                                             <FaArrowDownLong />
@@ -302,22 +354,28 @@ const Transactions = () => {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="TransactionContentResultC">
-                                    <div className="TransactionContentResultCItem">
-                                        <div className="TransactionContentResultC1">
-                                            $2000
-                                        </div>
-                                        <div className="TransactionContentResultC2">
-                                            CRYPTO
-                                        </div>
-                                        <div className="TransactionContentResultC3">
-                                            Flex
-                                        </div>
-                                        <div className="TransactionContentResultC4">
-                                            Fri, Nov 25, 2023 4:03 AM
+
+                                {
+                                    others?.map((props) => (
+                                        <div className="TransactionContentResultC">
+                                        <div className="TransactionContentResultCItem">
+                                            <div className="TransactionContentResultC1">
+                                                ${props.amount}
+                                            </div>
+                                            <div className="TransactionContentResultC2">
+                                                {props.transactionType}
+                                            </div>
+                                            <div className="TransactionContentResultC3">
+                                                {props.status}
+                                            </div>
+                                            <div className="TransactionContentResultC4">
+                                                {props.date}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    ))
+                                }
+                               
                                 <div className="TransactionContentResultD">
                                     <div className="TransactionContentResultDLeft">
                                         Showing 3 &nbsp; <p> to 3 &nbsp;</p> of

@@ -88,7 +88,7 @@
   width: 100%;
   height: max-content;
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -206,7 +206,7 @@
 
 .DashHomeMainContentActiveDiv{
   width: 100%;
-  height: 270px;
+  height: max-content;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -220,7 +220,7 @@
 
 .DashHomeMainContentActiveDivBox{
   width: 100%;
-  height: 80%;
+  height: max-content;
   border: 1px solid #ebf8fc;
   -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
   box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
@@ -229,6 +229,7 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
+  padding: 19px;
 }
 .DashHomeMainContentActiveDivBox p{
   font-size: 16px;
@@ -247,6 +248,27 @@
   line-height: 24px;
   color: #fff;
   cursor: pointer;
+}
+
+.DashHomeMainContentActiveDivBoxPlans{
+  width: 100%;
+  height: max-content;
+  box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.DashHomeMainContentActiveDivBoxPlansItem{
+  width: 100%;
+    height: max-content;
+    padding: 30px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid lightblue;
+    border-radius: 10px;
+    padding-left: 5px;
 }
 
 .DashHomeMainContenRecentTransactionDiv{

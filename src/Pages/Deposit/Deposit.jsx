@@ -32,17 +32,17 @@ const Deposit = () => {
             setDoge(false)
             setEth(false)
             setbnb(false)
-            nav(`payment/BITCOINP PAYMENT`)
+            nav(`payment/BTC`)
         } else if(eth === true) {
             setDoge(false)
             setBitcoin(false)
             setbnb(false)
-            nav(`payment/ETHEREUM PAYMENT`)
+            nav(`payment/ETH`)
         } else if(doge === true) {
             setEth(false)
             setBitcoin(false)
             setbnb(false)
-            nav(`payment/USDT PAYMENT`)
+            nav(`payment/DOGECOIN PAYMENT`)
         } else if(bnb === true) {
             setDoge(false)
             setBitcoin(false)
@@ -90,8 +90,8 @@ const Deposit = () => {
                                     }}
                                 />
                             </div>
-                            <div className="DepositContentLeftDownInput">
-                                <span>USDT PAYMENT</span>
+                            {/* <div className="DepositContentLeftDownInput">
+                                <span>DOGECOIN PAYMENT</span>
                                 <input type="radio"  name="b"
                                     onChange={()=>{
                                         setBitcoin(false),
@@ -101,7 +101,7 @@ const Deposit = () => {
                                         setButtonDisabled(false)
                                     }}
                                 />
-                            </div>
+                            </div> */}
                             {/* <div className="DepositContentLeftDownInput">
                                 <span>BNB PAYMENT</span>
                                 <input type="radio"  name="b"

@@ -1,102 +1,180 @@
-import {
-    FaCopy,
-    FaNotesMedical,
-} from "react-icons/fa";
+import {FaCopy, FaNotesMedical} from "react-icons/fa";
 import "./DashHome.css";
-import lineChart from '../../assets/linechart.webp'
-import {useSelector} from 'react-redux'
-import { useEffect, useState } from "react";
-import axios from "axios";
-import vid from '../../assets/crypt.mp4'
+import lineChart from "../../assets/linechart.webp";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import axios, {all} from "axios";
+import vid from "../../assets/crypt.mp4";
+import {FaArrowRight, FaChevronRight} from "react-icons/fa6";
+import {getSinglePlan} from "../../Components/store/FeaturesSlice";
+import "../MyPlans/MyPlans.css";
+import { useParams } from "react-router";
 
-
-const DashHome = ({homechange, planchange, Transactions}) => {
+const DashHome = ({
+    homechange,
+    planchange,
+    Transactions,
+    handleShowDetailPlan,
+}) => {
     const [exchangeRate, setExchangeRate] = useState(null);
-    const userData = useSelector((state) => state.persisitedReducer.user)
-    console.log(userData);
+    const userData = useSelector((state) => state.persisitedReducer.user);
+    // console.log(userData);
 
     useEffect(() => {
         // Fetch the current exchange rate from an API (replace with a reliable API)
-        axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
-          .then(response => {
-            const rate = response.data.bpi.USD.rate.replace(',', ''); // assuming USD rate
-            setExchangeRate(parseFloat(rate));
-          })
-          .catch(error => {
-            console.error('Error fetching exchange rate:', error);
-          });
-      }, []); // Empty dependency array ensures useEffect runs only once on component mount
+        axios
+            .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+            .then((response) => {
+                const rate = response.data.bpi.USD.rate.replace(",", ""); // assuming USD rate
+                setExchangeRate(parseFloat(rate));
+            })
+            .catch((error) => {
+                console.error("Error fetching exchange rate:", error);
+            });
+    }, []); // Empty dependency array ensures useEffect runs only once on component mount
 
-      const bitcoinValue = userData.accountBalance / exchangeRate;
-      const bitcoinValue2 = userData.totalProfit / exchangeRate;
-      const bitcoinValue3 = userData.bonus / exchangeRate;
-      const bitcoinValue4 = userData.ref / exchangeRate;
-      const bitcoinValue5 = userData.totalDeposit / exchangeRate;
-      const bitcoinValue6 = userData.totalWithdrawal / exchangeRate;
-      const bitcoinValue7 = userData.totalInvestment / exchangeRate;
-      const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
-      const roundedNumber2 = parseFloat(bitcoinValue2.toFixed(8));
-      const roundedNumber3 = parseFloat(bitcoinValue3.toFixed(8));
-      const roundedNumber4 = parseFloat(bitcoinValue4.toFixed(8));
-      const roundedNumber5 = parseFloat(bitcoinValue5.toFixed(8));
-      const roundedNumber6 = parseFloat(bitcoinValue6.toFixed(8));
-      const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
-      console.log("this is it",roundedNumber);
+    const bitcoinValue = userData?.accountBalance / exchangeRate;
+    const bitcoinValue2 = userData?.totalProfit / exchangeRate;
+    const bitcoinValue3 = userData?.bonus / exchangeRate;
+    const bitcoinValue4 = userData?.ref / exchangeRate;
+    const bitcoinValue5 = userData?.totalDeposit / exchangeRate;
+    const bitcoinValue6 = userData?.totalWithdrawal / exchangeRate;
+    const bitcoinValue7 = userData?.totalInvestment / exchangeRate;
+    const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
+    const roundedNumber2 = parseFloat(bitcoinValue2.toFixed(8));
+    const roundedNumber3 = parseFloat(bitcoinValue3.toFixed(8));
+    const roundedNumber4 = parseFloat(bitcoinValue4.toFixed(8));
+    const roundedNumber5 = parseFloat(bitcoinValue5.toFixed(8));
+    const roundedNumber6 = parseFloat(bitcoinValue6.toFixed(8));
+    const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
+    // console.log("this is it", roundedNumber);
+
+    const allPlans = useSelector((state) => state.persisitedReducer.plans);
+
+    // console.log(allPlans);
+    const dispatch = useDispatch();
+
+    const handleViewMoreSinglePlan = (item) => {
+        dispatch(getSinglePlan(item));
+        handleShowDetailPlan();
+    };
+
+    const {id} = useParams()
+    const [others, setOthers] = useState();
+    const [alluserplan, setAlluserplan] = useState();
+
+    const url3 = `https://tonexbackend.onrender.com/api/getalltransactions/${id}`
+    const url4 = `https://tonexbackend.onrender.com/api/getalluserplan/${id}`
+
+    const getAllOthers = ()=>{
+        axios.get(url3)
+            .then(res=>{
+            // console.log(res.data)
+            setOthers(res.data)
+        })
+         .catch((err)=>{
+            console.log(err)
+        })
+}
+    const getalluserplan = ()=>{
+        axios.get(url4)
+            .then(res=>{
+            console.log("getalluserplan",res.data)
+            setAlluserplan(res.data)
+        })
+         .catch((err)=>{
+            console.log(err)
+        })
+}
+
+useEffect(()=>{
+ getAllOthers()
+ getalluserplan()
+},[])
+    // const calculateTotalInvestment = (array) => {
+    //     if (array.length === 0) {
+    //         return 0;
+    //     }
+
+    //     const total = array.reduce((accumulator, currentValue) => {
+    //         const currentValueNumber = parseFloat(currentValue.currentInvAmt);
+    //         return accumulator + currentValueNumber;
+    //     }, 0);
+
+    //     return total;
+    // };
+
+    // const totalInvestment = calculateTotalInvestment(allPlans);
+    // console.log("Total Investment:", totalInvestment);
+    // const bitcoinValue7 = totalInvestment / exchangeRate;
+    // const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
 
     return (
         <>
             <div className="DashHomeBody">
                 <h2 className="DashHomeHeaderText">
                     Welcome, <span>{userData?.fullName}</span>
-                    
                 </h2>
                 <div className="DashHomeInfoBox1">
-                    <p>Welcome to Coinstarpro Bitminers, Forverver in Profits.</p>
+                    <p>Welcome to Bitpaynexus, You set the level.</p>
                 </div>
                 <div className="DashHomeInfoBox2">
-                    <p>Welcome to Coinstarpro Bitminers</p>
+                    <p>Welcome to Bitpaynexus</p>
                 </div>
                 <div className="DashHomeMainContent">
                     <div className="DashHomeMainContentAccSummaryDiv">
-                        <h3 className="DashHomeMainContentAccSummaryDivH3Text">Account Summary</h3>
+                        <h3 className="DashHomeMainContentAccSummaryDivH3Text">
+                            Account Summary
+                        </h3>
                         <div className="DashHomeMainContentAccSummary">
                             <div className="DashHomeMainContentAccSummaryRow1">
                                 <div className="DashHomeMainContentAccSummaryRow1Box">
                                     <div className="DashHomeMainContentAccSummaryRow1BoxL">
                                         <h4>Account Balance</h4>
-                                        <h3>$ &nbsp;{userData?.accountBalance}.00</h3>
-                                        <span style={{fontWeight:"700"}}>{roundedNumber}BTC</span>
+                                        <h3>
+                                            $ &nbsp;{userData?.accountBalance}
+                                            .00
+                                        </h3>
+                                        <span style={{fontWeight: "700"}}> 
+                                        </span>
                                         <p className="lineChart"></p>
                                     </div>
                                     <div className="DashHomeMainContentAccSummaryRow1BoxR">
                                         <img src={lineChart} alt="" />
                                     </div>
                                 </div>
-                                {/* <div className="DashHomeMainContentAccSummaryRow1Box">
-                                    <div className="DashHomeMainContentAccSummaryRow1BoxL">
-                                        <h4>Total Profit</h4>
-                                        <h3>$ &nbsp;{userData?.totalProfit}.00</h3>
-                                        <span style={{fontWeight:"700"}}>{roundedNumber2}BTC</span>
-                                    </div>
-                                    <div className="DashHomeMainContentAccSummaryRow1BoxR">
-                                        <img src={lineChart} alt="" />
-                                    </div>
-                                </div> */}
                                 <div className="DashHomeMainContentAccSummaryRow1Box">
                                     <div className="DashHomeMainContentAccSummaryRow1BoxL">
-                                        <h4>Bonus</h4>
-                                        <h3>$ &nbsp;{userData?.bonus}.00</h3>
-                                        <span style={{fontWeight:"700"}}>{roundedNumber3}BTC</span>
+                                        <h4>Total Profit</h4>
+                                        <h3>
+                                            $ &nbsp;{userData?.totalProfit}.00
+                                        </h3>
+                                        <span style={{fontWeight: "700"}}>
+                                            
+                                        </span>
                                     </div>
                                     <div className="DashHomeMainContentAccSummaryRow1BoxR">
                                         <img src={lineChart} alt="" />
                                     </div>
                                 </div>
+                                <div className="DashHomeMainContentAccSummaryRow1Box">
+                                    <div className="DashHomeMainContentAccSummaryRow1BoxL">
+                                        <h4>Bonus</h4>
+                                        <h3>$ &nbsp;{userData?.bonus}.00</h3>
+                                        <span style={{fontWeight: "700"}}>
+                                        </span>
+                                    </div>
+                                    <div className="DashHomeMainContentAccSummaryRow1BoxR">
+                                        <img src={lineChart} alt="" />
+                                    </div>
+                                </div>
+                                {/* <div className="DashHomeMainContentAccSummaryRow2"> */}
                                 <div className="DashHomeMainContentAccSummaryRow2Box">
                                     <div className="DashHomeMainContentAccSummaryRow2BoxL">
                                         <h4>Referral Bonus</h4>
                                         <h3>$ &nbsp;{userData?.ref}.00</h3>
-                                        <span style={{fontWeight:"700"}}>{roundedNumber4}BTC</span>
+                                        <span style={{fontWeight: "700"}}>
+                                        </span>
                                     </div>
                                     <div className="DashHomeMainContentAccSummaryRow1BoxR">
                                         <img src={lineChart} alt="" />
@@ -105,8 +183,11 @@ const DashHome = ({homechange, planchange, Transactions}) => {
                                 <div className="DashHomeMainContentAccSummaryRow2Box">
                                     <div className="DashHomeMainContentAccSummaryRow2BoxL">
                                         <h4>Total Deposits</h4>
-                                        <h3>$ &nbsp;{userData?.totalDeposit}.00</h3>
-                                        <span style={{fontWeight:"700"}}>{roundedNumber5}BTC</span>
+                                        <h3>
+                                            $ &nbsp;{userData?.totalDeposit}.00
+                                        </h3>
+                                        <span style={{fontWeight: "700"}}>
+                                        </span>
                                     </div>
                                     <div className="DashHomeMainContentAccSummaryRow1BoxR">
                                         <img src={lineChart} alt="" />
@@ -115,8 +196,12 @@ const DashHome = ({homechange, planchange, Transactions}) => {
                                 <div className="DashHomeMainContentAccSummaryRow2Box">
                                     <div className="DashHomeMainContentAccSummaryRow2BoxL">
                                         <h4>Total Widthdrawal</h4>
-                                        <h3>$ &nbsp;{userData?.totalWithdrawal}.00</h3>
-                                        <span style={{fontWeight:"700"}}>{roundedNumber6}BTC</span>
+                                        <h3>
+                                            $ &nbsp;{userData?.totalWithdrawal}
+                                            .00
+                                        </h3>
+                                        <span style={{fontWeight: "700"}}>
+                                        </span>
                                     </div>
                                     <div className="DashHomeMainContentAccSummaryRow1BoxR">
                                         <img src={lineChart} alt="" />
@@ -124,61 +209,148 @@ const DashHome = ({homechange, planchange, Transactions}) => {
                                 </div>
                                 <div className="DashHomeMainContentAccSummaryRow2Box">
                                     <div className="DashHomeMainContentAccSummaryRow2BoxL">
-                                        <h4>Total Profit </h4>
-                                        <h3>$ &nbsp;{userData?.totalProfit}.00</h3>
-                                        <span style={{fontWeight:"700"}}>{roundedNumber2}BTC</span>
+                                        <h4>Total Investment</h4>
+                                        <h3>
+                                            $ {userData?.totalInvestment}
+                                            .00
+                                        </h3>
+                                        <span style={{fontWeight: "700"}}>
+                                        </span>
                                     </div>
                                     <div className="DashHomeMainContentAccSummaryRow1BoxR">
                                         <img src={lineChart} alt="" />
                                     </div>
                                 </div>
-                            {/* </div> */}
+                                {/* </div> */}
                             </div>
                         </div>
                     </div>
                     <div className="DashHomeMainContentActiveDiv">
                         <h3>
-                            Active Plans(s) <span>({userData?.accountBalance <= 0 ? "0" : "1" })</span>
+                            Active Plans(s){" "}
+                            <span>
+                                {alluserplan?.length}
+                            </span>
                         </h3>
                         <div className="DashHomeMainContentActiveDivBox">
-                        
-                                {
-                                userData?.accountBalance  <= 0 ? <>
-                                   <p>You do not have an active investment plan at the
-                                    moment.</p>
-                                    <button onClick={()=> {homechange(false); planchange(true)}}>Buy Plan</button> 
-                                </>: <>
-                                {userData?.newDay <= 0 ? "Your trading session has expired" : "Your trading session has started"} 
-                                    {userData?.newDay <= 0 ? <button onClick={()=> {homechange(false); planchange(true)}}>Buy Plan</button>:null}
-                                </> 
-                                
-                            }
+                            {alluserplan?.length > 0 ? (
+                                <>
+                                    <div className="DashHomeMainContentActiveDivBoxPlans">
+                                        {alluserplan.map((item, index) => (
+                                            <div
+                                                className="DashHomeMainContentActiveDivBoxPlansItem"
+                                                key={index}
+                                            >
+                                                <div className="MyPlansActiveDivItem1A">
+                                                    <p>{item?.plan.planName}</p>
+                                                    <p>
+                                                        Amount - $
+                                                        {item?.plan.investment.amount}
+                                                    </p>
+                                                </div>
+                                                <div className="MyPlansActiveDivItem1B">
+                                                    <p>
+                                                        {item?.plan.investment.Date}
+                                                        <FaArrowRight className="FaArrowRight" />
+                                                    </p>
+                                                    <p>Start Date</p>
+                                                </div>
+                                                <div className="MyPlansActiveDivItem1C">
+                                                    <p>{item?.plan.investment.endDate}</p>
+                                                    <p>End Date</p>
+                                                </div>
+                                                <div className="MyPlansActiveDivItem1D">
+                                                    <button>Active</button>
+                                                    <p>Status</p>
+                                                </div>
+                                                <div className="MyPlansActiveDivItem1E">
+                                                    <FaChevronRight
+                                                        className="FaChevronRight"
+                                                        onClick={() =>
+                                                            handleViewMoreSinglePlan(
+                                                                item
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <p>
+                                        You do not have an active investment
+                                        plan at the moment.
+                                    </p>
+                                    <button
+                                        onClick={() => {
+                                            homechange(false);
+                                            planchange(true);
+                                        }}
+                                    >
+                                        Buy Plan
+                                    </button>
+                                </>
+                            )}
+                            {/* <button>Buy a plan</button> */}
                         </div>
                     </div>
                     <div className="DashHomeMainContenRecentTransactionDiv">
                         <h3>
-                            Recent Transaction <span>(0)</span>
+                            Recent Transaction <span>({others?.length})</span>
                         </h3>
                         <div className="DashHomeMainContenRecentTransactionDivBox">
-                            <p className="DashHomeMainContenRecentTransactionDivBoxEndText" onClick={()=> {homechange(false); Transactions(true)}}>
+                            <p
+                                className="DashHomeMainContenRecentTransactionDivBoxEndText"
+                                onClick={() => {
+                                    homechange(false);
+                                    Transactions(true);
+                                }}
+                            >
                                 <span>
                                     <FaNotesMedical />
-                                </span> 
+                                </span>
                                 View all transactions
                             </p>
                             <div className="DashHomeMainContenRecentTransactionDivBoxTop">
-                                <p className="DashHomeMainContenRecentTransactionDivBoxTopDate">Date</p>
-                                <p className="DashHomeMainContenRecentTransactionDivBoxTopType">Type</p>
-                                <p className="DashHomeMainContenRecentTransactionDivBoxTopAmount">Amount</p>
+                                <p className="DashHomeMainContenRecentTransactionDivBoxTopDate">
+                                    Date
+                                </p>
+                                <p className="DashHomeMainContenRecentTransactionDivBoxTopType">
+                                    Type
+                                </p>
+                                <p className="DashHomeMainContenRecentTransactionDivBoxTopAmount">
+                                    Amount
+                                </p>
                             </div>
                             <div className="DashHomeMainContenRecentTransactionDivBoxDown">
-                                <div className="DashHomeMainContenRecentTransactionDivBoxDownItem1">No record yet</div>
-                                <div className="DashHomeMainContenRecentTransactionDivBoxDownItem1">
-                                    <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Date">Date</p>
-                                    <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Type">Type</p>
-                                    <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Amount">Amount</p>
+                                {
+                                    others?.length < 0 ?
+                                    <div className="DashHomeMainContenRecentTransactionDivBoxDownItem1">
+                                        No record yet
+                                    </div>
+                                
+                                    :
+
+                                    <>
+                                        {
+                                            others?.map((props) => (
+                                    <div className="DashHomeMainContenRecentTransactionDivBoxDownItem1" key={props._id}>
+                                    <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Date">
+                                        {props.date}
+                                    </p>
+                                    <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Type">
+                                        {props.transactionType}
+                                    </p>
+                                    <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Amount">
+                                        {props.amount}
+                                    </p>
                                 </div>
-                               
+                                            ))
+                                        }
+                                    </>
+                                }
                             </div>
                         </div>
                     </div>
@@ -188,7 +360,7 @@ const DashHome = ({homechange, planchange, Transactions}) => {
                         <div className="DashHomeMainContenReferUsDivBox">
                             <input
                                 type="text"
-                                value={`https://coinstarprobitminers.vercel.app/`}
+                                value={`https://thebitpaynexus.vercel.app/`}
                                 readOnly
                             />
                             <div className="DashHomeMainContenReferUsDivBoxCopy">
@@ -202,7 +374,7 @@ const DashHome = ({homechange, planchange, Transactions}) => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default DashHome;

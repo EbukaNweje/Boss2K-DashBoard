@@ -1,20 +1,12 @@
 import './Referrals.css'
 import {FaCopy, FaUser} from "react-icons/fa";
 import {FaArrowDownLong, FaArrowUpLong} from "react-icons/fa6";
-import { useState } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Referrals = () => {
-    
-    const [state, setState] = useState({
-        value: "https://www.thebitpaycapital.com/",
-        copied: false,
-      });
-
     return (
         <>
             <div className="ReferralBody">
-                <h1>Refer users to  Bitpay Capital community</h1>
+                <h1>Refer users to Bitpaynexus  community</h1>
                 <div className="ReferralContent">
                     <div className="ReferralContentTop">
                         <div className="ReferralContentTopInputndLabel">
@@ -25,17 +17,12 @@ const Referrals = () => {
                             <div className="ReferralContentTopReferUsDivBox">
                                 <input
                                     type="text"
-                                    value={state.value}
+                                    value={"https://thebitpaynexus.vercel.app/"}
                                     readOnly
                                 />
-                                <CopyToClipboard
-                                 text={state.value}
-                                 onCopy={() => setState({ copied: true })}
-                                 >
                                 <div className="ReferralContentTopReferUsDivBoxCopy">
                                     <FaCopy />
                                 </div>
-                                 </CopyToClipboard>
                             </div>
                         </div>
                         <div className='ReferralContentTopInfoBox'>

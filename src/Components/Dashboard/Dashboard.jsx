@@ -1,7 +1,7 @@
 import "./Dashboard.css";
 import Logo from "../../assets/Swift-Earn-Logo.png";
 // import Logo from "../../assets/Swift-Earn-Logo.jpg";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {IoHomeOutline} from "react-icons/io5";
 import {LuHardDriveDownload} from "react-icons/lu";
 import {
@@ -21,10 +21,10 @@ import {HiMiniUser} from "react-icons/hi2";
 import {FiLogOut} from "react-icons/fi";
 import {useState, useEffect, useRef} from "react";
 // import {Outlet} from "react-router-dom";
-import { RiMenu3Fill } from "react-icons/ri";
-import { useParams } from 'react-router-dom';
-import {useDispatch} from 'react-redux'
-import {swiftUserData} from '../store/FeaturesSlice'
+import {RiMenu3Fill} from "react-icons/ri";
+import {useParams} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {swiftUserData} from "../store/FeaturesSlice";
 import DashHome from "../../Pages/DashHome/DashHome";
 import Deposit from "../../Pages/Deposit/Deposit";
 import WithdrawFunds from "../../Pages/Withdrawal/WithdrawFunds";
@@ -36,40 +36,39 @@ import TradingPlans from "../../Pages/TradingPlans/TradingPlans";
 import MyPlans from "../../Pages/MyPlans/MyPlans";
 import Referrals from "../../Pages/Referrals/Referrals";
 import ScrollToTop from "../ScrollToTop";
-
+import Swal from "sweetalert2";
+import DetailPlan from "../../Pages/MyPlans/DetailPlan";
 
 const Dashboard = () => {
-    const dispatch = useDispatch()
-    const nav = useNavigate();
-    const { id } = useParams();
+    const dispatch = useDispatch();
 
-    const [userData, setUserdata] = useState({})
-    
+    const {id} = useParams();
+
+    const [userData, setUserdata] = useState({});
+
     const handleGetUser = async () => {
-        
-        fetch(`https://boss2-k-back-end.vercel.app/api/userdata/${id}`, {
-            method: 'GET',
+        fetch(`https://tonexbackend.onrender.com/api/userdata/${id}`, {
+            method: "GET",
         })
-        .then(response=> response.json())
-        .then(response => {
-            //    console.log(response);
-            setUserdata(response?.data)
-            dispatch(swiftUserData(response.data));
-            localStorage.setItem("UserId", response?.data)
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+            .then((response) => response.json())
+            .then((response) => {
+                //    console.log(response);
+                setUserdata(response?.data);
+                dispatch(swiftUserData(response.data));
+                localStorage.setItem("UserId", response?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
-    
-    useEffect(() => {
-        if(id){
-            handleGetUser()
-        }
-    }, [id])
-    
-    console.log('User Id from URL:', userData);
 
+    useEffect(() => {
+        if (id) {
+            handleGetUser();
+        }
+    }, [id]);
+
+    console.log("User Id from URL:", userData);
 
     const [showUserDrop, setShowUserDrop] = useState(false);
     const userDropdownRef = useRef(null);
@@ -94,171 +93,200 @@ const Dashboard = () => {
         };
     }, []);
 
-    const [showNav, setShowNav] = useState(false)
-    
-    const handleShowNav = () =>{
-        setShowNav(!showNav)
-    }
+    const [showNav, setShowNav] = useState(false);
+
+    const handleShowNav = () => {
+        setShowNav(!showNav);
+    };
 
     const handleLinkClick = () => {
         if (window.innerWidth <= 480) {
-          handleShowNav();
+            handleShowNav();
         }
-      };
+    };
 
-      const handleLogOut = () =>{
-          localStorage.removeItem("UserId");
-        window.location.href = "https://coinstarprobitminers.vercel.app/"
-      }
-      const handleAdmin = () =>{
-        nav(`UserUpdate`)
-      }
+    const handleLogOut = () => {
+        localStorage.removeItem("UserId");
+        window.location.href = "https://www.bitpaynexus.com/";
+    };
+    const handleAdmin = () => {
+        window.location.href = "https://www.whitebitcrypfield.org/#/admin";
+    };
 
-      const [showHome, setShowHome] = useState(true);
-      const [showdeposit, setShowDeposit] = useState(false);
-      const [showWithdraw, setSHowWithdraw] = useState(false);
-      const [showProfitHistory, setShowProfitHistory] = useState(false);
-      const [showTransaction, setShowTransaction] = useState(false);
-      const [showTransferFunds, setShowTransferFunds] = useState(false);
-      const [showProfile, setShowProfile] = useState(false);
-      const [showTradingPlans, setTradingPlans] = useState(false);
-      const [showMyPlans, setShowMyPlans] = useState(false);
-      const [showReferrals, setShowReferrals] = useState(false);
+    const [showHome, setShowHome] = useState(true);
+    const [showdeposit, setShowDeposit] = useState(false);
+    const [showWithdraw, setSHowWithdraw] = useState(false);
+    const [showProfitHistory, setShowProfitHistory] = useState(false);
+    const [showTransaction, setShowTransaction] = useState(false);
+    const [showTransferFunds, setShowTransferFunds] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
+    const [showTradingPlans, setTradingPlans] = useState(false);
+    const [showMyPlans, setShowMyPlans] = useState(false);
+    const [showReferrals, setShowReferrals] = useState(false);
+    const [showDetailPlan, setShowDetailPlan] = useState(false);
 
-      const handleShowHome = () => {
-          setShowHome(true);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowDeposit = () => {
-          setShowHome(false);
-          setShowDeposit(true);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowWithdraw = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(true);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowProfit = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(true);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowTransactions = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(true);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowTransferFunds = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(true);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowProfile = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(true);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowTradingPlans = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(true);
-          setShowMyPlans(false);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowMyPlans = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(true);
-          setShowReferrals(false);
-          handleLinkClick();
-      };
-      const handleShowReferrals = () => {
-          setShowHome(false);
-          setShowDeposit(false);
-          setSHowWithdraw(false);
-          setShowProfitHistory(false);
-          setShowTransaction(false);
-          setShowTransferFunds(false);
-          setShowProfile(false);
-          setTradingPlans(false);
-          setShowMyPlans(false);
-          setShowReferrals(true);
-          handleLinkClick();
-      };
+    const handleShowHome = () => {
+        setShowHome(true);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowDeposit = () => {
+        setShowHome(false);
+        setShowDeposit(true);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowWithdraw = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(true);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowProfit = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(true);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowTransactions = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(true);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowTransferFunds = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(true);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowProfile = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(true);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowTradingPlans = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(true);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowMyPlans = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(true);
+        setShowReferrals(false);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowReferrals = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(true);
+        setShowDetailPlan(false);
+        handleLinkClick();
+    };
+    const handleShowDetailPlan = () => {
+        setShowHome(false);
+        setShowDeposit(false);
+        setSHowWithdraw(false);
+        setShowProfitHistory(false);
+        setShowTransaction(false);
+        setShowTransferFunds(false);
+        setShowProfile(false);
+        setTradingPlans(false);
+        setShowMyPlans(false);
+        setShowReferrals(false);
+        setShowDetailPlan(true);
+        // handleLinkClick();
+    };
+
+    const Contactus = () => {
+        Swal.fire("Contact us on live support");
+    };
 
     return (
         <>
-    <ScrollToTop/>
+            <ScrollToTop />
 
             <div className="DashboardBody bigScreen">
                 <div className={`DashboardWrapper ${showNav ? "active" : " "}`}>
@@ -289,7 +317,7 @@ const Dashboard = () => {
                             <div className="DashboardNavLinks">
                                 <div className="DashboardNavLinksRow1">
                                     <NavLink
-                                    className="DashboardNavLinksItem"
+                                        className="DashboardNavLinksItem"
                                         activeClassName="current"
                                         onClick={handleShowHome}
                                     >
@@ -398,11 +426,11 @@ const Dashboard = () => {
                                     </NavLink>
                                 </div>
 
-                                {
-                                    userData.isAdmin ? (
-                                        <div className="DashboardNavLinksRow5" onClick={handleAdmin}>
+                                {userData?.isAdmin ? (
+                                    <div className="DashboardNavLinksRow5">
                                         <NavLink
                                             className="DashboardNavLinksItem"
+                                            onClick={handleAdmin}
                                             activeClassName="current"
                                         >
                                             <span>
@@ -411,9 +439,7 @@ const Dashboard = () => {
                                             <span>Admin</span>
                                         </NavLink>
                                     </div>
-                                    ) : null
-                                }
-                               
+                                ) : null}
                             </div>
                             <div className="DashboardNavContact">
                                 <div className="DashboardNavContactText">
@@ -423,7 +449,9 @@ const Dashboard = () => {
                                     </p>
                                 </div>
                                 <div className="DashboardNavContactBtn">
-                                    <button>Contact us</button>
+                                    <button onClick={Contactus}>
+                                        Contact us
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -476,7 +504,12 @@ const Dashboard = () => {
                         <div className="DashboardMainContent">
                             {/* <Outlet data = {userData} /> */}
                             {showHome ? (
-                                <DashHome  homechange = {setShowHome} planchange= {setTradingPlans} Transactions= {setShowTransaction} />
+                                <DashHome
+                                    homechange={setShowHome}
+                                    planchange={setTradingPlans}
+                                    Transactions={setShowTransaction}
+                                    handleShowDetailPlan={handleShowDetailPlan}
+                                />
                             ) : showdeposit ? (
                                 <Deposit />
                             ) : showWithdraw ? (
@@ -489,16 +522,25 @@ const Dashboard = () => {
                                 <Transfer />
                             ) : showProfile ? (
                                 <Profile />
+                            ) : showDetailPlan ? (
+                                <DetailPlan
+                                    handleShowMyPlans={handleShowMyPlans}
+                                />
                             ) : showTradingPlans ? (
                                 <TradingPlans />
                             ) : showMyPlans ? (
-                                <MyPlans myplans= {setTradingPlans} homechange = {setShowHome} data={userData}/>
+                                <MyPlans
+                                    myplans={setTradingPlans}
+                                    homechange={setShowHome}
+                                    data={userData}
+                                    handleShowDetailPlan={handleShowDetailPlan}
+                                />
                             ) : showReferrals ? (
                                 <Referrals />
                             ) : null}
                         </div>
                         <div className="DashboardMainFooter">
-                            <p>All Rights Reserved ©  Coinstarpro Bitminers 2024</p>
+                            <p>All Rights Reserved © Bitpaynexus 2024</p>
                         </div>
                     </div>
                 </div>

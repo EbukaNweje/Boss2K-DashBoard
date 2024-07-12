@@ -3,125 +3,220 @@ import {FaAngleDown} from "react-icons/fa";
 import "./TradingPlans.css";
 import {IoWalletOutline} from "react-icons/io5";
 import {useEffect, useState} from "react";
-import {useSelector} from 'react-redux'
-
+import {useSelector} from "react-redux";
+// import {addPlans} from "../../Components/store/FeaturesSlice";
+import {useDispatch} from "react-redux";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router";
+// import {toast} from "react-hot-toast";
 
 const TradingPlans = () => {
+    const {id} = useParams()
+    const userId = id
     const [showSelect, setShowSelect] = useState(false);
-    const [selectedPackage, setSelectedPackage] = useState(null)
-    const[planPrice, setPlanPrice] = useState(0)
-    const [boxPrice, setBoxPrice] = useState(0)
-    
-    const userData = useSelector((state) => state.persisitedReducer.user)
+    const [selectedPackage, setSelectedPackage] = useState(null);
+    console.log("namebe", userId);
+    const [planPrice, setPlanPrice] = useState(0);
+    // const [boxPrice, setBoxPrice] = useState(0);
+    const dispatch = useDispatch();
+
+    const nav = useNavigate()
+    const userData = useSelector((state) => state.persisitedReducer.user);
+    // const allPlans = useSelector((state) => state.persisitedReducer.plans);
+    console.log("mal", selectedPackage?._id);
 
     const handleShowSelect = () => {
         setShowSelect(!showSelect);
     };
 
-    const [disabledBtn, setDisabledBtn] = useState(true)
-    const [info, setInfo] = useState('')
-    const [error, setError] = useState(false)
+    const [disabledBtn, setDisabledBtn] = useState(true);
+    const [info, setInfo] = useState("");
+    const [error, setError] = useState(false);
 
-    const packageDatas = [
-        {
-            name: 'Starter Plan',
-            duration: 14 ,
-            price: "10,000",
-            minimumDeposit: "1,000",
-            maximunDeposit: "10,000",
-            minimumReturn: "150",
-            maximumReturn: "187",
-            // bonus: 0,
-            selected: true,
-        },
-        {
-            name: 'Silver Plan',
-            duration: 20,
-            price: "50,000",
-            minimumDeposit: "15,000",
-            maximunDeposit: "50,000",
-            minimumReturn: "225",
-            maximumReturn: "260",
-            // bonus: 0,
-            selected: true,
-        },
-        {
-            name: 'Gold Plan',
-            duration: 26,
-            price: "100,000",
-            minimumDeposit: "50,000",
-            maximunDeposit: "100,000",
-            minimumReturn: "280",
-            maximumReturn: "330",
-            // bonus: 0,
-            selected: true,
-        },
-        {
-            name: 'Platinum Plan',
-            duration: 32,
-            price: "3,000,000",
-            minimumDeposit: "100,000",
-            maximunDeposit: "3,000,000",
-            minimumReturn: "350",
-            maximumReturn: "401",
-            // bonus: 0,
-            selected: true,
-        },
-    ]
+    // const calculateEndDate = (startDate, duration) => {
+    //     const endDate = new Date(startDate);
+    //     endDate.setDate(endDate.getDate() + duration);
+    //     return endDate;
+    // };
 
-    // const amountBox = [
-    //     100,
-    //     250,
-    //     500,
-    //     1000,
-    //     1500,
-    //     2000,
-    // ]
+    // const formatDate = (date) => {
+    //     const options = {
+    //         weekday: "short",
+    //         month: "short",
+    //         day: "numeric",
+    //         year: "numeric",
+    //         hour: "numeric",
+    //         minute: "numeric",
+    //         hour12: true,
+    //     };
+    //     return new Date(date).toLocaleString("en-US", options);
+    // };
 
-    const validateSubmit = () =>{
-        if(userData.accountBalance <= 3){
-            setDisabledBtn(true)
-            setInfo('Insufficient funds')
-            setError(true)
-        } else if (planPrice > userData.us){
-            setDisabledBtn(true)
-            setInfo('Insufficient funds')
-            setError(true)
-        }else {
-            setDisabledBtn(false)
-            setInfo('')
-            setError(false)
+    // const packageDatas = [
+    //     {
+    //         name: "Starter plan",
+    //         duration: 7,
+    //         price: "9,999",
+    //         minimumDeposit: "3,000",
+    //         maximunDeposit: "9,999",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "STARTER" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         selected: true,
+    //         currentInvAmt: planPrice,
+    //         startDate: formatDate(new Date()), // Start date is set to current date
+    //         endDate: formatDate(calculateEndDate(new Date(), 7)), // Calculate end date dynamically
+    //     },
+    //     {
+    //         name: "Silver Plan",
+    //         duration: 14,
+    //         price: "29,999",
+    //         minimumDeposit: "10,000",
+    //         maximunDeposit: "29,999",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "SILVER" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         currentInvAmt: planPrice,
+    //         selected: true,
+    //         startDate: formatDate(new Date()), // Start date is set to current date
+    //         endDate: formatDate(calculateEndDate(new Date(), 14)), // Calculate end date dynamically
+    //     },
+    //     {
+    //         name: "Gold Plan",
+    //         duration: 28,
+    //         price: "1,000,000",
+    //         minimumDeposit: "30,000",
+    //         maximunDeposit: "99,999",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "GOLD" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         currentInvAmt: planPrice,
+    //         selected: true,
+    //         startDate: formatDate(new Date()),
+    //         endDate: formatDate(calculateEndDate(new Date(), 28)),
+    //     },
+    //     {
+    //         name: "Platinum Plan",
+    //         duration: 168,
+    //         price: "99,999",
+    //         minimumDeposit: "100,000",
+    //         maximunDeposit: "1,000,000",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "PLATINUM" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         currentInvAmt: planPrice,
+    //         selected: true,
+    //         startDate: formatDate(new Date()),
+    //         endDate: formatDate(calculateEndDate(new Date(), 168)),
+    //     },
+    // ];
+    const [userPlane, setUserPlane] = useState([]);
+    const getallPlan = () => {
+        const url = "https://tonexbackend.onrender.com/api/getallplan";
+        axios.get(url)
+            .then((response) => {
+                console.log(response.data.data);
+                setUserPlane(response.data.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    useEffect(() => {
+        getallPlan();
+    }, []);
+
+    const validateSubmit = () => {
+        if (planPrice > parseInt(userData.accountBalance)) {
+            setDisabledBtn(true);
+            setInfo("Insufficient fund");
+            setError(true);
+        } else {
+            setDisabledBtn(false);
+            setInfo("");
+            setError(false);
         }
+    };
+
+    useEffect(() => {
+        validateSubmit();
+    }, []);
+
+    const data  = {
+        planId: selectedPackage?._id,
+        amount: planPrice
+    }
+
+    const [show, setShow] = useState({err: false, msg : ""})
+    const [clickme, setClickMe] = useState(false)
+
+    const reload = () => {
+        setShow(false)
+        window.location.reload()
+        console.log("mememem")
     }
 
     const checkAmount = () => {
-        if(!planPrice){
-            alert("Please input a deposit amount")
-        }else if (!selectedPackage) {
-          alert("Please select a package");
-        } else {
-          const planPriceNumber = parseFloat(planPrice.replace(/,/g, ''));
-          const minDepositNumber = parseFloat(selectedPackage.minimumDeposit.replace(/,/g, ''));
-      
-          if (isNaN(planPriceNumber) || isNaN(minDepositNumber)) {
-            alert("Invalid plan price or minimum deposit");
-          } else if (planPriceNumber < minDepositNumber) {
-            alert(`${selectedPackage.name} minimum deposit should be at least $${minDepositNumber}`);
-          } else {
-            console.log("Making Plan...");
-            alert("Success.....");
-            window.location.reload()
-          }
-        }
-      };
+        setClickMe(true)
+        console.log(data)
+        const url = `https://tonexbackend.onrender.com/api/invest/${userId}`;
+        axios.post(url, data)
+            .then((response) => {
+                console.log(response.data.message);
+                setShow({err: true, msg : response.data.message})
+                // toast.success(response.data.message);
+                // window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+                setClickMe(false);
+                setShow({err: true, msg : error.response.data.message})
+            });
+    };
+    // const checkAmount = () => {
+    //     if (!planPrice) {
+    //         alert("Please input a deposit amount");
+    //     } else if (!selectedPackage) {
+    //         alert("Please select a package");
+    //     } else if (planPrice > parseInt(userData.accountBalance)) {
+    //         alert("Insufficent funds");
+    //     } else {
+    //         const planPriceNumber = parseFloat(planPrice.replace(/,/g, ""));
+    //         const minDepositNumber = parseFloat(
+    //             selectedPackage.minimumDeposit.replace(/,/g, "")
+    //         );
 
-   
-    
+    //         if (isNaN(planPriceNumber) || isNaN(minDepositNumber)) {
+    //             alert("Invalid plan price or minimum deposit");
+    //         } else if (planPriceNumber < minDepositNumber) {
+    //             alert(
+    //                 `${selectedPackage.planName} minimum deposit should be at least $${minDepositNumber}`
+    //             );
+    //         } else {
+    //             dispatch(addPlans(selectedPackage));
+    //             console.log("Making Plan...");
+    //             alert("Success.....");
+    //             // window.location.reload();
+    //         }
+    //     }
+    // };
 
-    useEffect(()=>{
-        validateSubmit()
-    },[])
-
+    const updatePlanPrice = (value) => {
+        setPlanPrice(value);
+        setSelectedPackage((prevPackage) => ({
+            ...prevPackage,
+            currentInvAmt: value,
+        }));
+    };
 
     return (
         <>
@@ -138,9 +233,9 @@ const TradingPlans = () => {
                                     <span>
                                         <FaHandHoldingDollar />
                                     </span>
-                                    {
-                                        selectedPackage !== null ? `${selectedPackage.name}` : 'SELECT PACKAGE'
-                                    }
+                                    {selectedPackage !== null
+                                        ? `${selectedPackage.planName}`
+                                        : "SELECT PACKAGE"}
                                 </h3>
                                 <p
                                     className={`Angle ${
@@ -155,73 +250,50 @@ const TradingPlans = () => {
                                     showSelect ? "active" : ""
                                 }`}
                             >
-                                {
-                                    packageDatas?.map((item, index)=>(
-                                        <div key={index} className="TradingPlansLeftBoxADropItem" onClick={()=>{
-                                            handleShowSelect()
+                                {userPlane?.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="TradingPlansLeftBoxADropItem"
+                                        onClick={() => {
+                                            handleShowSelect();
                                             setSelectedPackage(item);
-                                        }}>
-                                    <h3>
-                                        <span>
-                                            <FaHandHoldingDollar />
-                                        </span>
-                                        {item.name}
-                                    </h3>
-                                </div>
-                                    ))
-                                }
-                                
-                                {/* <div className="TradingPlansLeftBoxADropItem" onClick={handleShowSelect}>
-                                    <h3>
-                                        <span>
-                                            <FaHandHoldingDollar />
-                                        </span>
-                                        DELUXE PACKAGE
-                                    </h3>
-                                </div>
-                                <div className="TradingPlansLeftBoxADropItem" onClick={handleShowSelect}>
-                                    <h3>
-                                        <span>
-                                            <FaHandHoldingDollar />
-                                        </span>
-                                        ULTIMATE PACKAGE
-                                    </h3>
-                                </div> */}
+                                        }}
+                                    >
+                                        <h3>
+                                            <span>
+                                                <FaHandHoldingDollar />
+                                            </span>
+                                            {item.planName}
+                                        </h3>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-
-                        {/* <div className="TradingPlansLeftBoxB">
-                            <p>Choose Quick Amount to Invest</p>
-                            <div className="TradingPlansLeftBoxBItem">
-                                {
-                                    amountBox.map((item, index) =>(
-                                        <div key={index} className="TradingPlansLeftBoxBAmount" onClick={()=>{
-                                            setBoxPrice(item)
-                                            setPlanPrice(item)
-                                        }
-                                        }>
-                                    ${item}
-                                </div>
-                                    ))
-                                }
-                                
-                            </div>
-                        </div> */}
-                        
                         <div className="TradingPlansLeftBoxC">
                             <p>Enter Your Amount</p>
-                            <input type="number" min={0} placeholder="0" onChange={(e)=> {
-                                setPlanPrice(e.target.value)
-                            }
-                            }/>
+                            <input
+                                type="text"
+                                min={0}
+                                placeholder="0"
+                                // value={planPrice}
+                                onChange={(e) =>
+                                    updatePlanPrice(e.target.value)
+                                }
+                            />
                         </div>
                         <div className="TradingPlansLeftBoxD">
-                            <p>Available balance <span style={{color: 'red'}}>{error ? `${info}` : null}</span></p>
+                            <p>
+                                Available balance{" "}
+                                <span style={{color: "red"}}>
+                                    {error ? `${info}` : null}
+                                </span>
+                            </p>
                             <div className="TradingPlansLeftBoxDDiv">
                                 <div className="TradingPlansLeftBoxDItem">
                                     <IoWalletOutline className="IoWalletOutline" />
                                     <p>
-                                        Account Balance <span >${userData?.accountBalance}</span>
+                                        Account Balance{" "}
+                                        <span>${userData?.accountBalance}</span>
                                     </p>
                                 </div>
                             </div>
@@ -230,19 +302,19 @@ const TradingPlans = () => {
                     <div className="TradingPlansRight">
                         <h3>Your Investment Details</h3>
                         <div className="TradingPlansRightBox">
-                            {
-                                selectedPackage && (<>
+                            {selectedPackage && (
+                                <>
                                     <div className="TradingPlansRightBoxRow1">
-                                <div className="TradingPlansRightBoxRow1L">
-                                    <h5>Name of plan</h5>
-                                    <p>{selectedPackage.name}</p>
-                                </div>
-                                <div className="TradingPlansRightBoxRow1R">
-                                    <h5>Plan Price</h5>
-                                    <p>{selectedPackage.price}</p>
-                                </div>
-                            </div>
-                            {/* <div className="TradingPlansRightBoxRow1">
+                                        <div className="TradingPlansRightBoxRow1L">
+                                            <h5>Name of plan</h5>
+                                            <p>{selectedPackage.planName}</p>
+                                        </div>
+                                        <div className="TradingPlansRightBoxRow1R">
+                                            <h5>Plan Price</h5>
+                                            <p>$ {selectedPackage.maximumDeposit}</p>
+                                        </div>
+                                    </div>
+                                    {/* <div className="TradingPlansRightBoxRow1">
                                 <div className="TradingPlansRightBoxRow1L">
                                     <h5>Duration</h5>
                                     <p>{selectedPackage.duration} Days</p>
@@ -252,35 +324,46 @@ const TradingPlans = () => {
                                     <p>{selectedPackage.profit}% Daily</p>
                                 </div>
                             </div> */}
-                            <div className="TradingPlansRightBoxRow1">
-                                <div className="TradingPlansRightBoxRow1L">
-                                    <h5>Minimum Deposit</h5>
-                                    <p>${selectedPackage.minimumDeposit}</p>
-                                </div>
-                                <div className="TradingPlansRightBoxRow1R">
-                                    <h5>Maximum Deposit</h5>
-                                    <p>${selectedPackage.maximunDeposit}</p>
-                                </div>
-                            </div>
-                            <div className="TradingPlansRightBoxRow1">
-                                <div className="TradingPlansRightBoxRow1L">
-                                    <h5>Minimum Return</h5>
-                                    <p>{selectedPackage.minimumReturn}%</p>
-                                </div>
-                                <div className="TradingPlansRightBoxRow1R">
-                                    <h5>Maximum Return</h5>
-                                    <p>{selectedPackage.maximumReturn}%</p>
-                                </div>
-                            </div>
-                            <div className="TradingPlansRightBoxRow2">
-                                <div className="TradingPlansRightBoxRow1L">
-                                <h5>Duration</h5>
-                                <p>{selectedPackage.duration} Days</p>
-                                </div>
-                            </div>
-                                </>)
-                            }
-                            
+                                    <div className="TradingPlansRightBoxRow1">
+                                        <div className="TradingPlansRightBoxRow1L">
+                                            <h5>Minimum Deposit</h5>
+                                            <p>
+                                                $
+                                                {selectedPackage.minimumDeposit}
+                                            </p>
+                                        </div>
+                                        <div className="TradingPlansRightBoxRow1R">
+                                            <h5>Maximum Deposit</h5>
+                                            <p>
+                                                $
+                                                {selectedPackage.maximumDeposit}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="TradingPlansRightBoxRow1">
+                                        <div className="TradingPlansRightBoxRow1L">
+                                            <h5>Interest</h5>
+                                            <p>
+                                                {selectedPackage.percentageInterest}%
+                                            </p>
+                                        </div>
+                                        <div className="TradingPlansRightBoxRow1L">
+                                            <h5>Duration</h5>
+                                            <p>
+                                                {selectedPackage.durationDays} Days
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {/* <div className="TradingPlansRightBoxRow2">
+                                        <div className="TradingPlansRightBoxRow1L">
+                                            <h5>Duration</h5>
+                                            <p>
+                                                {selectedPackage.durationDays} Days
+                                            </p>
+                                        </div>
+                                    </div> */}
+                                </>
+                            )}
                         </div>
                         <div className="TradingPlansRightBoxPay">
                             <div className="TradingPlansRightBoxPayTop">
@@ -292,11 +375,31 @@ const TradingPlans = () => {
                                 <p>
                                     Amount to invest: <span>${planPrice}</span>
                                 </p>
-                                <button disabled={disabledBtn} onClick={checkAmount}>Confirm & Invest</button>
+                                <button
+                                    onClick={checkAmount}
+                                    disabled={disabledBtn}
+                                >
+                                    {clickme ? "Loading..." : "Confirm & Invest" }
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+                        {
+                            show.err === true ?
+                            <div className='SuccessPaid'>
+                <div className='PayCon'>
+                    <h3>{show.msg} </h3>
+
+                    {
+                        show.msg === "plan not found" || show.msg === `Amount must be between ${selectedPackage.minimumDeposit} and ${selectedPackage.maximumDeposit}`  ? <button style={{width: "50%", height: "40px", background:"#0e4152", border:"none", color:"white", fontSize:"15px"}} onClick={()=>{setShow(false); nav(`/${id}`)}}>close</button>
+                        :
+                        <button onClick={reload}  style={{width: "50%", height: "40px", background:"#0e4152", border:"none", color:"white", fontSize:"15px"}}>ok</button>
+                    }
+                </div>
+            </div>: null
+            }
+                
             </div>
         </>
     );
