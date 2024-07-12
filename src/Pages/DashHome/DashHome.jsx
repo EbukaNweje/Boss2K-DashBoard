@@ -63,8 +63,8 @@ const DashHome = ({
     const [others, setOthers] = useState();
     const [alluserplan, setAlluserplan] = useState();
 
-    const url3 = `https://tonexbackend.onrender.com/api/getalltransactions/${id}`
-    const url4 = `https://tonexbackend.onrender.com/api/getalluserplan/${id}`
+    const url3 = `https://boss2-k-back-end.vercel.app/api/getalltransactions/${id}`
+    const url4 = `https://boss2-k-back-end.vercel.app/api/getalluserplan/${id}`
 
     const getAllOthers = ()=>{
         axios.get(url3)

@@ -54,7 +54,7 @@ const MyPlans = ({myplans, homechange, handleShowDetailPlan}) => {
 
     const {id} = useParams()
     const [alluserplan, setAlluserplan] = useState();
-    const url4 = `https://tonexbackend.onrender.com/api/getalluserplan/${id}`
+    const url4 = `https://boss2-k-back-end.vercel.app/api/getalluserplan/${id}`
 
     const getalluserplan = ()=>{
         axios.get(url4)

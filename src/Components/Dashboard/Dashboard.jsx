@@ -47,7 +47,7 @@ const Dashboard = () => {
     const [userData, setUserdata] = useState({});
 
     const handleGetUser = async () => {
-        fetch(`https://tonexbackend.onrender.com/api/userdata/${id}`, {
+        fetch(`https://boss2-k-back-end.vercel.app/api/userdata/${id}`, {
             method: "GET",
         })
             .then((response) => response.json())

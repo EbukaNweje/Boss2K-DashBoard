@@ -37,9 +37,9 @@ const Transactions = () => {
         setTransOthers(true);
     };
 
-    const url = `https://tonexbackend.onrender.com/api/getalldeposit/${id}`
-    const url2 = `https://tonexbackend.onrender.com/api/getallwithdrawal/${id}`
-    const url3 = `https://tonexbackend.onrender.com/api/getalltransactions/${id}`
+    const url = `https://boss2-k-back-end.vercel.app/api/getalldeposit/${id}`
+    const url2 = `https://boss2-k-back-end.vercel.app/api/getallwithdrawal/${id}`
+    const url3 = `https://boss2-k-back-end.vercel.app/api/getalltransactions/${id}`
 
     const getAllDeposit = ()=>{
            axios.get(url)

@@ -120,7 +120,7 @@ const TradingPlans = () => {
     // ];
     const [userPlane, setUserPlane] = useState([]);
     const getallPlan = () => {
-        const url = "https://tonexbackend.onrender.com/api/getallplan";
+        const url = "https://boss2-k-back-end.vercel.app/api/getallplan";
         axios.get(url)
             .then((response) => {
                 console.log(response.data.data);
@@ -168,7 +168,7 @@ const TradingPlans = () => {
     const checkAmount = () => {
         setClickMe(true)
         console.log(data)
-        const url = `https://tonexbackend.onrender.com/api/invest/${userId}`;
+        const url = `https://boss2-k-back-end.vercel.app/api/invest/${userId}`;
         axios.post(url, data)
             .then((response) => {
                 console.log(response.data.message);

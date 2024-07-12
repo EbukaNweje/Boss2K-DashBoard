@@ -13,7 +13,7 @@ const PersonalSettings = ({data}) => {
 
   const userinfo = {fullName, userName, phoneNumber}
 
-    const updateuserurl = `https://tonexbackend.onrender.com/api/userdata/${data._id}`
+    const updateuserurl = `https://boss2-k-back-end.vercel.app/api/userdata/${data._id}`
     const upDateUser = () => {
         setButtonDisabled(true)
         axios.patch(updateuserurl, userinfo)

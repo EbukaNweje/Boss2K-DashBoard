@@ -30,12 +30,12 @@ const Payment = () => {
     const dispatch = useDispatch()
 
     const [state, setState] = useState({
-        value: `${paymentname === "BTC"? ("bc1q74h3rlsym78se547d3fpzcurl8avel9ss23maj"): paymentname === "ETH"? ("0xaC9F59FdEcca26e0b422e219A6d40118fCd686CB"):"Chosse a Payment Method"}`,
+        value: `${paymentname === "BTC"? ("bc1qt4r7kue4q3lnneq85t0w3uhn7v9w8ht7gceatl"): paymentname === "ETH"? ("0x5846bAC433aE1E4c81a951e8b8e4655eeB03a41F"):"Chosse a Payment Method"}`,
         copied: false,
       });
 
-      const url = `https://tonexbackend.onrender.com/api/sendpayment/${id}`
-      const url2 = `https://tonex-backend.vercel.app/api/deposit/${id}`
+      const url = `https://boss2k.onrender.com/api/sendpayment/${id}`
+      const url2 = `https://boss2-k-back-end.vercel.app/api/deposit/${id}`
 
       const data = {
         amount:amount
