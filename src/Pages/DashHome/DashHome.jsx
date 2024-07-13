@@ -64,7 +64,7 @@ const DashHome = ({
     const [alluserplan, setAlluserplan] = useState();
 
     const url3 = `https://boss2-k-back-end.vercel.app/api/getalltransactions/${id}`
-    const url4 = `https://boss2-k-back-end.vercel.app/api/getalluserplan/${id}`
+    const url4 = `https://boss2-k-back-end.vercel.app/api/getallinvestmentplan/${id}`
 
     const getAllOthers = ()=>{
         axios.get(url3)
@@ -86,6 +86,8 @@ const DashHome = ({
             console.log(err)
         })
 }
+
+console.log(alluserplan?.data)
 
 useEffect(()=>{
  getAllOthers()
@@ -229,14 +231,14 @@ useEffect(()=>{
                         <h3>
                             Active Plans(s){" "}
                             <span>
-                                {alluserplan?.length}
+                                {alluserplan?.data?.length}
                             </span>
                         </h3>
                         <div className="DashHomeMainContentActiveDivBox">
-                            {alluserplan?.length > 0 ? (
+                            {alluserplan?.data?.length > 0 ? (
                                 <>
                                     <div className="DashHomeMainContentActiveDivBoxPlans">
-                                        {alluserplan.map((item, index) => (
+                                        {alluserplan.data.map((item, index) => (
                                             <div
                                                 className="DashHomeMainContentActiveDivBoxPlansItem"
                                                 key={index}
@@ -245,18 +247,18 @@ useEffect(()=>{
                                                     <p>{item?.plan.planName}</p>
                                                     <p>
                                                         Amount - $
-                                                        {item?.plan.investment.amount}
+                                                        {item?.amount}
                                                     </p>
                                                 </div>
                                                 <div className="MyPlansActiveDivItem1B">
                                                     <p>
-                                                        {item?.plan.investment.Date}
+                                                        {item?.Date}
                                                         <FaArrowRight className="FaArrowRight" />
                                                     </p>
                                                     <p>Start Date</p>
                                                 </div>
                                                 <div className="MyPlansActiveDivItem1C">
-                                                    <p>{item?.plan.investment.endDate}</p>
+                                                    <p>{item?.endDate}</p>
                                                     <p>End Date</p>
                                                 </div>
                                                 <div className="MyPlansActiveDivItem1D">
