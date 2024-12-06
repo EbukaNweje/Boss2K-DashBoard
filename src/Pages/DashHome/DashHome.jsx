@@ -118,10 +118,10 @@ useEffect(()=>{
                     Welcome, <span>{userData?.fullName}</span>
                 </h2>
                 <div className="DashHomeInfoBox1">
-                    <p>Welcome to Coinstarpro Bitminers, You set the level.</p>
+                    <p>Welcome to FinInvestoHub, You set the level.</p>
                 </div>
                 <div className="DashHomeInfoBox2">
-                    <p>Welcome to Coinstarpro Bitminers</p>
+                    <p>Welcome to FinInvestoHub</p>
                 </div>
                 <div className="DashHomeMainContent">
                     <div className="DashHomeMainContentAccSummaryDiv">
@@ -362,7 +362,7 @@ useEffect(()=>{
                         <div className="DashHomeMainContenReferUsDivBox">
                             <input
                                 type="text"
-                                value={`https://coinstarprobitminers.vercel.app/`}
+                                value={`https://fininvestohub.vercel.app/`}
                                 readOnly
                             />
                             <div className="DashHomeMainContenReferUsDivBoxCopy">
